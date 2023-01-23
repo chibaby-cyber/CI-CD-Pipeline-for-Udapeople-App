@@ -1,6 +1,9 @@
 version: 2.1
+
 orbs:
-  slack: circleci/slack@4.1
+  node: circleci/node@5.0.3
+  slack: circleci/slack@4.10.1
+  
 
 jobs:
   build-frontend:
@@ -94,22 +97,22 @@ jobs:
             npm install#
             npm audit fix --audit-level=critical --force
   
-  deploy:
-    docker:
-      - image: 'cimg/base:stable'
+  build-test-and-notify:
+    executor:
+      name: node/default
     steps:
-      - run: echo "Build Failed"
-      - slack/notify:
-          event: fail
-          mentions: '@EngineeringTeam'
-          template: basic_fail_1
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run: npm test
       - slack/notify:
           event: pass
           template: success_tagged_deploy_1
-    
-      
-
- 
+      - slack/notify:
+          event: fail
+          mentions: "@chidinma"
+          template: basic_fail_1
             
 
 workflows:
@@ -125,7 +128,7 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      - deploy:
-          context: slack-secrets
-          requires: [scan-backend]
+      - build-test-and-notify
+          #context: slack-secrets
+          #requires: [scan-backend]
       
