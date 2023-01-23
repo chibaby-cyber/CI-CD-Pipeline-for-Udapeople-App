@@ -63,7 +63,6 @@ jobs:
           name: Back-end test
           command: |
             cd backend
-            sudo apt install nodejs
             npm install
             npm run test
       
