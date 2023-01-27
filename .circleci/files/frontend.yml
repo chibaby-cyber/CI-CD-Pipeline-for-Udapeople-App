@@ -5,12 +5,13 @@ Parameters:
   ID:
     Description: Unique identifier.
     Type: String
+    Default: "533226558473"
 
 Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "udapeople-${ID}"
+      BucketName: !Sub "udapeople333-${ID}"
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html

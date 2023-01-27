@@ -22,7 +22,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
+            aws s3 rm s3://udapeople333-${ID} --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
 
@@ -155,6 +155,28 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
+  
+  configure-infrastructure:
+    docker:
+      - image: python:3.9.16-alpine3.17
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["52:62:de:8b:52:b2:e4:e9:29:ea:a8:90:2a:99:10:39"] 
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+  
+    
+      # Here's where you will add some code to rollback on failure  
           
 
             
@@ -177,4 +199,6 @@ workflows:
           filters:
             branches:
               only: [master]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       
