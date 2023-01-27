@@ -10,19 +10,21 @@ commands:
             event: fail
             channel: 03-cloud-devops-eng
             template: basic_fail_1
+            
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-   
+    parameters:
+      Workflow_ID:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
-            
-
-
-  
+            aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
+            aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
 
 jobs:
   build-frontend:
@@ -97,7 +99,7 @@ jobs:
       - run:
           name: Scan Front-end 
           command: |
-            cd frontend#
+            cd frontend
             npm install
             npm audit fix --audit-level=critical --force
       - notify_on_failure
@@ -112,7 +114,7 @@ jobs:
       - run:
           name: Scan Back-end 
           command: |
-            cd backend#
+            cd backend
             npm install
             npm audit fix --audit-level=critical --force
       - notify_on_failure
@@ -142,35 +144,19 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            aws ec2 describe-instances \
+            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople" \
-              --output text >> inventory.txt
+              --output text)
+            echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt 
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-      # Here's where you will add some code to rollback on failure      
+          
 
-
-  
-  build-test-and-notify:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: npm install
-      - run: npm test
-      - slack/notify:
-          event: pass
-          template: success_tagged_deploy_1
-      - slack/notify:
-          event: fail
-          mentions: "@chidinma"
-          template: basic_fail_1
             
 
 workflows:
@@ -186,5 +172,9 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [master]
       
