@@ -1,5 +1,4 @@
 ---
-
 - name: "configuration play." 
   hosts: web
   user: ubuntu
