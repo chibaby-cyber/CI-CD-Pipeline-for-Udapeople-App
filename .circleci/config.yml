@@ -252,7 +252,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.9.16-alpine3.17
+      - image: cimg/python:3.10
     steps:
       - checkout
       - add_ssh_keys:
@@ -262,7 +262,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
+            python3 -m pip install --user ansible
             sudo apt-get install curl
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             sudo apt-get install unzip
