@@ -263,6 +263,12 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            sudo apt-get install unzip
+            unzip awscliv2.zip
+            sudo ./aws/install
+            curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+            sudo apt-get install -y nodejs
       - run:
           name: Deploy backend
           command: |
