@@ -220,6 +220,8 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - install_awscli
+      - install_nodejs
       - run:
           name: Install dependencies
           command: |
@@ -251,6 +253,8 @@ jobs:
       - image: python:3.9.16-alpine3.17
     steps:
       - checkout
+      - install_awscli
+      - install_nodejs
       - add_ssh_keys:
           fingerprints: ["52:62:de:8b:52:b2:e4:e9:29:ea:a8:90:2a:99:10:39"] 
       - attach_workspace:
@@ -274,6 +278,29 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
+
+  smoke-test:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      # Checkout code from git
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+      - run:
+          name: Backend smoke test.
+          command: |
+            # your code here
+      - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure  
      
     
       
