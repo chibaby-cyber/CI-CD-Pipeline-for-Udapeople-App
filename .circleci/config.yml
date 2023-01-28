@@ -259,6 +259,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            install nodejs
             apk add --update ansible
       - run:
           name: Deploy backend
@@ -281,11 +282,10 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            install nodejs
       - run:
           name: Get backend url
           command: |
