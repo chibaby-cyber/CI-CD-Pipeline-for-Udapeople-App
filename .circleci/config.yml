@@ -22,7 +22,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws s3 rm s3://udapeople333-${ID} --recursive
+            aws s3 rm s3://udapeople333-533226558473 --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
 
@@ -221,8 +221,8 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-builds]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -243,12 +243,30 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
-            npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment
       - revert-migrations
+
+  deploy-backend:
+    docker:
+      - image: python:3.9.16-alpine3.17
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["52:62:de:8b:52:b2:e4:e9:29:ea:a8:90:2a:99:10:39"] 
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure  
      
     
       
