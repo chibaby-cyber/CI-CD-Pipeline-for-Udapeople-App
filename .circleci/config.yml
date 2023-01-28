@@ -217,14 +217,13 @@ jobs:
       
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: circleci/node:14.18.2
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
             cd frontend
-            install nodejs
             npm install
       - run:
           name: Get backend url
@@ -249,7 +248,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.9.16-alpine3.17
+      - image: circleci/node:14.18.2
     steps:
       - checkout
       - add_ssh_keys:
@@ -259,7 +258,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            install nodejs
             apk add --update ansible
       - run:
           name: Deploy backend
