@@ -281,8 +281,9 @@ jobs:
             cd backend
             npm i
             npm run build
+            tar -czf artifact.tar.gz dist/* package*
             cd ..
-            tar -C backend -czvf artifact.tar.gz .
+            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
@@ -298,20 +299,86 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            install nodejs
+            sudo apt-get install curl
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            sudo apt-get install unzip
+            unzip awscliv2.zip
+            sudo ./aws/install
+            # Install Node.js LTS version as our base Node.js version
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+
+            # Use n version manager to switch to Node.js v13.8.0
+            sudo npm install -g n
+            sudo n 13.8.0
       - run:
           name: Get backend url
           command: |
-            # your code here
+            export BACKEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" \
+              --output text)
+            
       - run:
           name: Backend smoke test.
           command: |
-            # your code here
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+                return 0
+            else
+                return 1
+            fi
       - run:
           name: Frontend smoke test.
           command: |
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+                # Change this to 0 after the job fails
+              return 1
+            else
+              return 1
+            fi
+      - destroy-environment
+      - revert-migrations 
+
+  cloudfront-update:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
             # your code here
-      # Here's where you will add some code to rollback on failure  
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+      - destroy-environment
+      - revert-migrations 
+  
+  cleanup:
+    docker:
+      - image: a
+    steps:
+      - checkout
+      - run:
+          name: Get old stack workflow id
+          command: |
+            # your code here
+            export OldWorkflowID="the id here"
+            export STACKS=[] #put the list of stacks here
+      - run:
+          name: Remove old stacks and files
+          command: |
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            then
+              # your code here
+            fi
      
     
       
@@ -345,4 +412,6 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
       
