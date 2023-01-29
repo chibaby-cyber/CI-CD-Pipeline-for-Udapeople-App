@@ -262,21 +262,12 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            python3 -m pip install --user ansible
-            sudo apt-get install curl
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            sudo apt-get install unzip
-            unzip awscliv2.zip
-            sudo ./aws/install
-            # Install Node.js LTS version as our base Node.js version
-            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-
-            # Use n version manager to switch to Node.js v13.8.0
-            sudo npm install -g n
-            sudo n 13.8.0
+            pip install --upgrade pip
+            pip install awscli
+            apk add --update nodejs npm ansible zip
             cd backend
-            npm install
+            apk add --update nodejs-npm
+            apk add --update npm
       - run:
           name: Package Backend
           command: |
