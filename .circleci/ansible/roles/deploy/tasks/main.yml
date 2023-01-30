@@ -19,22 +19,18 @@
     src: node_modules.tar.gz
     dest: /home/ubuntu/node_modules/
 
-- name: "Installing Node Dependencies"
-  shell: |
-    cd ~/backend-app
-    npm i
-- name: "Executing Node app with PM2"
-  shell: |
-    cd ~/backend-app/dist
-    pm2 stop default
-    pm2 start main.js
+- name: "start app"
+  shell: |       
+      pm2 start npm -f ./main.js -- run start
+  args: 
+    chdir: /home/ubuntu/dist/
 
-  register: execute_node
+- name: "List processes"
+  shell: |      
+      pm2 list
+  register: pm2_result 
 
-- name: print message
+- name: "Print in the debug console"
   debug:
-    msg: "{{ execute_node.stdout_lines }}"
-- name: "Configure pm2 to start as service"
-  shell: |
-    sudo su -c "env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu"
-    pm2 save
+    var: pm2_result.stdout_lines
+
