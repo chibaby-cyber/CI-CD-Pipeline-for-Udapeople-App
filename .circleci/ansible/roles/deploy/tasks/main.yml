@@ -1,13 +1,23 @@
 ---
-- name: "Creates backend app directory"
+- name: Creates directory n
   file:
-    path: ~/backend-app
+    path: ~/node_modules
     state: directory
-    
-- name: "Unarchive backend files"
+
+- name: Creates directory d
+  file:
+    path: ~/dist
+    state: directory
+
+- name: Unarchive Backend
   unarchive:
-    src: artifact.tar.gz
-    dest: ~/backend-app
+    src: dist.tar.gz
+    dest: /home/ubuntu/dist/
+    
+- name: Copy and unarchive node_modules
+  unarchive:
+    src: node_modules.tar.gz
+    dest: /home/ubuntu/node_modules/
 
 - name: "Installing Node Dependencies"
   shell: |
