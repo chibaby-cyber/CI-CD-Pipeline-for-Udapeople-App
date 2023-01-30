@@ -313,23 +313,18 @@ jobs:
 
   smoke-test:
     docker:
-      - image: cimg/base:stable
+      - image: python:3.9.16-alpine3.17
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get install curl
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            sudo apt-get install unzip
-            unzip awscliv2.zip
-            sudo ./aws/install
-            # Install Node.js LTS version as our base Node.js version
-            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-
-            sudo npm install -g n
-            sudo n 13.8.0
+            pip install --upgrade pip
+            pip install awscli
+            apk add --update nodejs npm zip
+            apk add --update ansible
+            apk add --update curl
+           
       - run:
           name: Get backend url
           command: |
