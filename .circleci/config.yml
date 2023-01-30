@@ -252,7 +252,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: python:3.9.16-alpine3.17
     steps:
       - checkout
       - add_ssh_keys:
@@ -264,7 +264,9 @@ jobs:
           command: |
             pip install --upgrade pip
             pip install awscli
-            apk add --update nodejs npm ansible zip
+            apk add --update nodejs npm zip
+            apk add --update ansible
+            apk add --update curl
             
       - run:
           name: Deploy backend
@@ -303,10 +305,10 @@ jobs:
           name: Run Ansible
           command: |
             cd /root/project/.circleci/ansible
-              echo "Contents  of the inventory.txt file is _____________________________________>>"
-              cat inventory.txt
-              ansible-playbook deploy-backend.yml -i inventory.txt
-        
+            echo "Contents  of the inventory.txt file is _____________________________________>>"
+            cat inventory.txt
+            ansible-playbook deploy-backend.yml -i inventory.txt
+      
       
       - destroy-environment
       - revert-migrations
