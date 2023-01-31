@@ -24,6 +24,11 @@
     production: yes
     state: present
 
+- name: Creates directory n
+  file:
+    path: ~/node_modules
+    state: directory
+
 - name: Creates directory d
   file:
     path: ~/dist
@@ -33,6 +38,11 @@
   unarchive:
     src: dist.tar.gz
     dest: /home/ubuntu/dist/
+    
+- name: Copy and unarchive node_modules
+  unarchive:
+    src: node_modules.tar.gz
+    dest: /home/ubuntu/node_modules/
 
 - name: "start app"
   shell: |       
