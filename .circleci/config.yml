@@ -286,14 +286,15 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-              cd backend
-              npm install
-              npm run build
-              echo build successful      
+            cd backend
+            npm install
+            npm run build
+            echo build successful      
       - run:
           name: Configure server
           command: |    
             cd ..
+            pwd
             tar -C backend -czvf artifact.tar.gz .
       - run:
           name: Run Ansible
