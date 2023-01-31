@@ -317,8 +317,6 @@ jobs:
             sudo apt-get install unzip
             unzip awscliv2.zip
             sudo ./aws/install        
-      - attach_workspace:
-          at: ./
       - run:
           name: Smoke test backend
           command: |
@@ -328,7 +326,7 @@ jobs:
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            if curl "$(API_URL)/api/status" | grep "ok"
+            if curl $(API_URL)/api/status | grep "ok"
             then
                 echo "Backend smoke test succeeded"
                 exit 0
