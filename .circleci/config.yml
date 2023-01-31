@@ -307,7 +307,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
