@@ -205,6 +205,7 @@ jobs:
             echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> ".env"
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
+            cd ..
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
 
