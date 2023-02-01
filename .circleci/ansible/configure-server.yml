@@ -1,3 +1,5 @@
+---
+
 - name: configuration play.
   hosts: web
   user: ubuntu
@@ -20,9 +22,6 @@
       apt:
         name: ["python3"]
         state: latest
-      
-
-  # Get the environment variables from CircleCI and add to the EC2 instance
   
   environment:
     - key: TYPEORM_CONNECTION
