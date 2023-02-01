@@ -4,11 +4,6 @@
   apt:
     update_cache: yes
 
-- name: "upgrade packages"
-  become: true
-  apt:
-    upgrade: yes
-
 - name: "remove stale dependencies"
   become: true
   apt:
