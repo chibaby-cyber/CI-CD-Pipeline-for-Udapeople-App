@@ -195,6 +195,16 @@ jobs:
       - run:
           name: Configure server
           command: |
+            cd backend
+            echo TYPEORM_CONNECTION=postgres >> "backend/dist/.env"
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/dist/.env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/dist/.env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/dist/.env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/dist/.env"
+            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> "backend/dist/.env"
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/dist/.env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/dist/.env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/dist/.env"
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
 
@@ -347,7 +357,7 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment
+      
       - revert-migrations 
 
   cloudfront-update:
