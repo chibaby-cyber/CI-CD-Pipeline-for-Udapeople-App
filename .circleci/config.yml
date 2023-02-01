@@ -43,7 +43,6 @@ commands:
               npm run migration:revert
               curl --insecure https://kvdb.io/4x2jEqsqyfywJ2obnErpaW/migration_${CIRCLE_WORKFLOW_ID:0:7} -XDELETE
             fi
-
 jobs:
   build-frontend:
     docker:
