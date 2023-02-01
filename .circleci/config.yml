@@ -290,8 +290,6 @@ jobs:
           fingerprints: ["52:62:de:8b:52:b2:e4:e9:29:ea:a8:90:2a:99:10:39"] 
       - attach_workspace:
           at: ~/
-      - restore_cache:
-          keys: [backend-build]
       - run:
           name: Deploy backend
           command: |
