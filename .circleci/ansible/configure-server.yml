@@ -24,7 +24,7 @@
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   
-  os_environment:
+  environment:
     - key: TYPEORM_CONNECTION
       value: "{{ lookup('ansible.builtin.env', 'TYPEORM_CONNECTION')}}"
     - key: TYPEORM_ENTITIES
@@ -50,7 +50,7 @@
         state: present
         regexp: "^{{ item.key }}="
         line: "{{ item.key }}={{ item.value }}"
-      with_items: "{{ os_environment }}"
+      with_items: "{{ environment }}"
 
  
   roles:
