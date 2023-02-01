@@ -4,11 +4,6 @@
   apt:
     update_cache: yes
 
-- name: "remove stale dependencies"
-  become: true
-  apt:
-    autoremove: yes
-
 - name: "install dependencies."
   become: true
   apt:
