@@ -61,79 +61,79 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
 
-#   build-backend:
-#     docker:
-#       - image: circleci/node:14.18.2
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys: [backend-build]
-#       - run:
-#           name: Back-end build
-#           command: |
-#             cd backend
-#             npm install
-#             npm run build
-#       - save_cache:
-#           paths: [backend/node_modules]
-#           key: backend-build
+  build-backend:
+    docker:
+      - image: circleci/node:14.18.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end build
+          command: |
+            cd backend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
 
-#   test-frontend:
-#     docker:
-#       - image: circleci/node:14.18.2
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys: [frontend-build]
-#       - run:
-#           name: Front-end test
-#           command: |
-#             cd frontend
-#             npm install
-#             npm run test
+  test-frontend:
+    docker:
+      - image: circleci/node:14.18.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Front-end test
+          command: |
+            cd frontend
+            npm install
+            npm run test
                       
-#   test-backend:
-#     docker:
-#       - image: circleci/node:14.18.2
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys: [backend-build]
-#       - run:
-#           name: Back-end test
-#           command: |
-#             cd backend
-#             npm install
-#             npm run test
+  test-backend:
+    docker:
+      - image: circleci/node:14.18.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end test
+          command: |
+            cd backend
+            npm install
+            npm run test
   
-#   scan-frontend:
-#     docker:
-#       - image: circleci/node:14.18.2
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys: [frontend-build]
-#       - run:
-#           name: Scan Front-end 
-#           command: |
-#             cd frontend
-#             npm install
-#             npm audit fix --audit-level=critical --force
-#       - notify_on_failure
+  scan-frontend:
+    docker:
+      - image: circleci/node:14.18.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Scan Front-end 
+          command: |
+            cd frontend
+            npm install
+            npm audit fix --audit-level=critical --force
+      - notify_on_failure
 
-#   scan-backend:
-#     docker:
-#       - image: circleci/node:14.18.2
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys: [backend-build]
-#       - run:
-#           name: Scan Back-end 
-#           command: |
-#             cd backend
-#             npm install
-#             npm audit fix --audit-level=critical --force
+  scan-backend:
+    docker:
+      - image: circleci/node:14.18.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Scan Back-end 
+          command: |
+            cd backend
+            npm install
+            npm audit fix --audit-level=critical --force
   
 #   deploy-infrastructure:
 #     docker: 
@@ -402,15 +402,15 @@ workflows:
   default:
     jobs:
       - build-frontend
-#       - build-backend
-#       - test-frontend:
-#           requires: [build-frontend]
-#       - test-backend:
-#           requires: [build-backend]
-#       - scan-backend:
-#           requires: [build-backend]
-#       - scan-frontend:
-#           requires: [build-frontend]
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
 #       - deploy-infrastructure:
 #           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
 #           filters:
