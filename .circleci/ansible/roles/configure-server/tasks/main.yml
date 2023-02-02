@@ -1,4 +1,5 @@
 ---
+
 - name: "update apt packages."
   become: true
   apt:
@@ -8,6 +9,11 @@
   become: true
   apt:
     upgrade: yes
+    
+- name: "remove stale dependencies"
+  become: true
+  apt:
+    autoremove: yes
 
 - name: "install dependencies."
   become: true
