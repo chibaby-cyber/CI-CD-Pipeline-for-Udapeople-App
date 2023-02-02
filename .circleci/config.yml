@@ -245,14 +245,11 @@ jobs:
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - url.txt
       - run:
           name: Deploy frontend objects
           command: |
             cd frontend
+            npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople333-533226558473 --recursive
@@ -264,6 +261,10 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints: ["52:62:de:8b:52:b2:e4:e9:29:ea:a8:90:2a:99:10:39"] 
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -272,21 +273,37 @@ jobs:
             sudo apt-get install unzip
             unzip awscliv2.zip
             sudo ./aws/install
-      - add_ssh_keys:
-          fingerprints: ["52:62:de:8b:52:b2:e4:e9:29:ea:a8:90:2a:99:10:39"] 
-      - attach_workspace:
-          at: ~/
       - run:
           name: Deploy backend
           command: |
+            pwd
             cd backend
+            
+            
+            touch .env
+            echo ENVIRONMENT=production > ".env"
+            echo TYPEORM_CONNECTION=postgres >> ".env"
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
+            echo NODE_ENV=production >> ".env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
+            
+            pwd
+            ls -al
             npm install
             npm run build
             echo build successful      
       - run:
           name: Configure server
-          command: |    
+          command: |   
+            cd ..
             pwd
+            ls -al
             tar -C backend -czvf artifact.tar.gz .
       - run:
           name: Run Ansible
