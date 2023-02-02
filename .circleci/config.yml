@@ -206,7 +206,7 @@ jobs:
             cd backend
             sudo npm install -g npm
             npm run build
-            sudo npm run migrations > migrations_dump.txt
+            npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
 
       - run:
@@ -339,7 +339,11 @@ jobs:
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            if curl ${API_URL}/api/status | grep "ok"
+            
+            echo "sleeping for 1min"
+            sleep 60
+            
+            if curl -v ${API_URL}/api/status | grep "ok"
             then
                 echo "Backend smoke test succeeded"
                 exit 0
