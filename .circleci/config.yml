@@ -205,7 +205,8 @@ jobs:
           command: |
             cd backend
             sudo npm install -g npm
-            npm run migrations > migrations_dump.txt
+            npm run build
+            sudo npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
 
       - run:
@@ -301,6 +302,7 @@ jobs:
       - run:
           name: Configure server
           command: |   
+            pwd
             cd ..
             pwd
             ls -al
