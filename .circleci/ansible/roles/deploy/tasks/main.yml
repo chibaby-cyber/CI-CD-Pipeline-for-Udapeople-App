@@ -3,19 +3,19 @@
 - name: Creates directory 
   become: true
   file:
-    path: /home/ubuntu/web
+    path: /home/ubuntu/web/
     state: directory
 
 - name: Copy files to ec2 instance
   copy:
     src: ~/project/artifact.tar.gz
-    dest: /home/ubuntu/web
+    dest: /home/ubuntu/web/
 
 - name: Extract file and start server
   become: true
   shell:
     cmd: |
-      cd /home/ubuntu/dist --limit
+      cd /home/ubuntu/web/ 
       tar -xvzf artifact.tar.gz
       npm install
       pm2 stop default
