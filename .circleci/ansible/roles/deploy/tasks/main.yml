@@ -7,7 +7,6 @@
     state: directory
 
 - name: Copy files to ec2 instance
-  become: true
   copy:
     src: ../../artifact.tar.gz
     dest: ~/dist
