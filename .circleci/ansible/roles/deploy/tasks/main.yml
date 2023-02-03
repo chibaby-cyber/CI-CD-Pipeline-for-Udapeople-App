@@ -15,7 +15,7 @@
   become: true
   shell:
     cmd: |
-      cd /home/ubuntu/dist
+      cd /home/ubuntu/dist --limit
       tar -xvzf artifact.tar.gz
       npm install
       pm2 stop default
