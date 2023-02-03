@@ -174,7 +174,7 @@ jobs:
   
   configure-infrastructure:
     docker:
-      - image: python:3.9.16-alpine3.17
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - add_ssh_keys:
@@ -184,7 +184,11 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip --no-cache ansible aws-cli openssh
+            apk add --update tar gzip 
+      - run:
+          name: Install Ansible
+          command: |
+            apk add ansible
       - run:
           name: Configure server
           command: |
