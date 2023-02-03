@@ -40,13 +40,13 @@ commands:
             then
               cd ~/project/backend
               npm install
-              npm run migration:revert
+              npm run migrations:revert
               curl --insecure https://kvdb.io/4x2jEqsqyfywJ2obnErpaW/migration_${CIRCLE_WORKFLOW_ID:0:7} -XDELETE
             fi
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -63,7 +63,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -80,7 +80,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -94,7 +94,7 @@ jobs:
                       
   test-backend:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -108,7 +108,7 @@ jobs:
   
   scan-frontend:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -123,7 +123,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -360,7 +360,7 @@ jobs:
             else
               return 1
             fi
-      - destroy-environment
+      # - destroy-environment
       - revert-migrations 
 
   cloudfront-update:
