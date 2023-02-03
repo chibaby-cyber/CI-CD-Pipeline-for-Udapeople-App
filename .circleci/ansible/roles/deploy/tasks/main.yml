@@ -10,7 +10,7 @@
     src: ~/project/artifact.tar.gz
     dest: ~/web
     
-- name: extract zip artificat into ec2 instance
+- name: extract zip artifat into ec2 instance
   unarchive:
     src: ~/web/artifact.tar.gz
     dest: ~/web
