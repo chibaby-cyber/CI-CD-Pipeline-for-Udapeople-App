@@ -14,7 +14,7 @@
   become: true
   shell:
     cmd: |
-      cd ~/web
+      cd web
       tar -xvzf artifact.tar.gz
       npm install
       pm2 stop default
