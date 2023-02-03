@@ -8,8 +8,8 @@
 
 - name: Copy files to ec2 instance
   copy:
-    src: artifact.tar.gz
-    dest: ~/dist
+    src: ~/project/artifact.tar.gz
+    dest: ~/dist/artifact.tar.gz
 
 - name: Extract file and start server
   become: true
