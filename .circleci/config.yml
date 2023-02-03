@@ -174,7 +174,7 @@ jobs:
   
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: python:3.9.16-alpine3.17
     steps:
       - checkout
       - add_ssh_keys:
@@ -184,11 +184,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update tar gzip 
-      - run:
-          name: Install Ansible
-          command: |
-            apk add ansible
+            apk add --update tar gzip ansible 
       - run:
           name: Configure server
           command: |
@@ -289,6 +285,7 @@ jobs:
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
+            echo {.circleci/ansible/roles/deploy/files}
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
