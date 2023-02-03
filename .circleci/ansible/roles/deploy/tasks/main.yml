@@ -9,13 +9,18 @@
   copy:
     src: ~/project/artifact.tar.gz
     dest: ~/web
+    
+- name: extract zip artificat into ec2 instance
+  unarchive:
+    src: ~/web/artifact.tar.gz
+    dest: ~/web
+    remote_src: yes
 
 - name: Extract file and start server
   become: true
   shell:
     cmd: |
-      cd web
-      tar -xvzf artifact.tar.gz
+      cd ~/web
       npm install
       pm2 stop default
       pm2 start npm -- start
