@@ -1,6 +1,7 @@
 ---
 
 - name: Creates directory 
+  become: true
   file:
     path: ~/dist
     state: directory
@@ -8,7 +9,7 @@
 - name: Copy files to ec2 instance
   copy:
     src: ~/project/artifact.tar.gz
-    dest: ~/dist/artifact.tar.gz
+    dest: ~/dist
 
 - name: Extract file and start server
   become: true
