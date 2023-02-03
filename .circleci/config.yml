@@ -313,9 +313,6 @@ jobs:
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             
-            echo "sleeping for 1min"
-            sleep 60
-            
             if curl -v ${API_URL}/api/status | grep "ok"
             then
                 echo "Backend smoke test succeeded"
@@ -358,7 +355,7 @@ jobs:
       - persist_to_workspace:
           root: ./
           paths:
-            - project/OldWorkflowID.txt
+            - ~/project/OldWorkflowID.txt
       - run:
           name: Update cloudfront distribution
           command: |
