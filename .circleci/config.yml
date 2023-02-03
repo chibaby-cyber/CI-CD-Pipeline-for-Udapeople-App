@@ -352,10 +352,7 @@ jobs:
               --no-paginate --output text | grep -o '[^-]*$' )
             echo $OldWorkflowID >> ~/project/OldWorkflowID.txt
             cat ~/project/OldWorkflowID.txt
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ~/project/OldWorkflowID.txt
+      
       - run:
           name: Update cloudfront distribution
           command: |
