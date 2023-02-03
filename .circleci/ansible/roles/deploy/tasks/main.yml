@@ -3,7 +3,7 @@
 - name: Creates directory 
   become: true
   file:
-    path: ~/dist
+    path: /home/ubuntu/dist
     state: directory
 
 - name: Copy files to ec2 instance
@@ -15,7 +15,7 @@
   become: true
   shell:
     cmd: |
-      cd ~/dist
+      cd /home/ubuntu/dist
       tar -xvzf artifact.tar.gz
       npm install
       pm2 stop default
