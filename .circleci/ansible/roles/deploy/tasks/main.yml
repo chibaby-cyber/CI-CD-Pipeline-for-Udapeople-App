@@ -1,7 +1,6 @@
 ---
 
 - name: Creates directory 
-  become: true
   file:
     path: ~/dist
     state: directory
