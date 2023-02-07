@@ -22,7 +22,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws s3 rm s3://udapeople-${ID} --recursive
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
 
@@ -289,7 +289,7 @@ jobs:
             cat inventory.txt
             echo "{.circleci/ansible/roles/deploy/files}"
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment
+      # - destroy-environment
       - revert-migrations
 
   smoke-test:
