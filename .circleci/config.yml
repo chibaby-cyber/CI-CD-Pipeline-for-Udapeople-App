@@ -289,7 +289,7 @@ jobs:
             cat inventory.txt
             echo "{.circleci/ansible/roles/deploy/files}"
             ansible-playbook -i inventory.txt deploy-backend.yml
-      # - destroy-environment
+      - destroy-environment
       - revert-migrations
 
   smoke-test:
